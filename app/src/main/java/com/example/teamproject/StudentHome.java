@@ -1,12 +1,17 @@
 package com.example.teamproject;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,8 +20,11 @@ import androidx.fragment.app.Fragment;
 public class StudentHome extends Fragment {
 
     private View view;
-    private TextView homeName, homeClass;
+    protected TextView homeName, homeClass;
+    private Button logoutBtn;
     protected ImageView homePoto;
+    Context context = getActivity();
+    private StudentActivity studentActivity = new StudentActivity();
 
     @Nullable
     @Override
@@ -26,13 +34,41 @@ public class StudentHome extends Fragment {
         homeName = view.findViewById(R.id.hStudentName);
         homeClass = view.findViewById(R.id.hStudentClass);
         homePoto = view.findViewById(R.id.hProfileImage);
+        logoutBtn = view.findViewById(R.id.logoutBtn);
 
-     //   Intent intent = Intent.getIntent();
-     //   String email = intent.getStringExtra("email");
-     //   String class_room = intent.
 
-     //s   homeName.setText(email);
-    //    homeClass.setText();
+        //받아온 데이터
+        Bundle bundle = getArguments();
+        String id = bundle.getString("id");
+        String name = bundle.getString("name");
+        String email = bundle.getString("email");
+        String position = bundle.getString("position");
+        String class_name = bundle.getString("class_name");
+        String jwt = bundle.getString("jwt");
+        if(bundle != null){
+            homeName.setText(name);
+            homeClass.setText(class_name);
+        }
+
+        //로그아웃버튼
+        logoutBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(getContext()).setTitle("로그아웃").setMessage("로그아웃 하시겠습니까?").setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
+            }
+        });
 
         return view;
     }

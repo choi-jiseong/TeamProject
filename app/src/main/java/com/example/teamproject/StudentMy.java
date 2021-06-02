@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -27,10 +28,12 @@ public class StudentMy extends Fragment {
 
     private View view;
     private ImageView imageView;
+    private EditText etName, etClass_name, etEmail;
     private Button changeBtn;
     private int REQUEST_IMAGE_CODE = 1001;
     private int REQUEST_EXTERNAL_STORAGE_PERMISSION = 1002;
     private StudentHome profile = new StudentHome();
+    private StudentActivity studentActivity = new StudentActivity();
 
     @Nullable
     @Override
@@ -39,7 +42,23 @@ public class StudentMy extends Fragment {
 
         imageView = view.findViewById(R.id.mProfileImage);
         changeBtn = view.findViewById(R.id.mBtnChangeImage);
+        etName = view.findViewById(R.id.etMname);
+        etClass_name = view.findViewById(R.id.etMclass);
+        etEmail = view.findViewById(R.id.etMeamil);
 
+        Bundle bundle = getArguments();
+        String id = bundle.getString("id");
+        String name = bundle.getString("name");
+        String email = bundle.getString("email");
+        String position = bundle.getString("position");
+        String class_name = bundle.getString("class_name");
+        String jwt = bundle.getString("jwt");
+        if(bundle != null){
+            etName.setText(name);
+            etClass_name.setText(class_name);
+            etEmail.setText(email);
+        }
+//    <----------------------------------사진관련코드------------------------------->
         if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)){
 
@@ -48,6 +67,7 @@ public class StudentMy extends Fragment {
             }
         }
 
+        //사진변경 버튼
         changeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,4 +98,6 @@ public class StudentMy extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    //    <----------------------------------사진관련코드------------------------------->
 }

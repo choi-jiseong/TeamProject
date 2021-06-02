@@ -20,6 +20,15 @@ public class StudentCalendar extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.student_calendar, container, false);
+
+        Bundle bundle = getArguments();
+
+        if(bundle != null){
+//            System.out.println(bundle.getString("name"));
+//            homeName.setText(bundle.getString("name"));
+//            homeClass.setText(bundle.getString("class_name"));
+        }
+
         return view;
     }
 }
