@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginRequest extends StringRequest {
-    final static private String URL = "dlswns619.dothome.co.kr/api/client/login";
+    final static private String URL = "";
     private Map<String, String> parameters;
 
     public LoginRequest(String email, String password, Response.Listener<String> listener){
