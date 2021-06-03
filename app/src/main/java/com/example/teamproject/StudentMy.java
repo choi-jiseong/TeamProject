@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,21 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StudentMy extends Fragment {
 
@@ -32,8 +45,8 @@ public class StudentMy extends Fragment {
     private Button changeBtn;
     private int REQUEST_IMAGE_CODE = 1001;
     private int REQUEST_EXTERNAL_STORAGE_PERMISSION = 1002;
-    private StudentHome profile = new StudentHome();
-    private StudentActivity studentActivity = new StudentActivity();
+    private StudentHome studentHome = new StudentHome();
+
 
     @Nullable
     @Override
@@ -53,6 +66,7 @@ public class StudentMy extends Fragment {
         String position = bundle.getString("position");
         String class_name = bundle.getString("class_name");
         String jwt = bundle.getString("jwt");
+        token(jwt);
         if(bundle != null){
             etName.setText(name);
             etClass_name.setText(class_name);
@@ -100,4 +114,42 @@ public class StudentMy extends Fragment {
     }
 
     //    <----------------------------------사진관련코드------------------------------->
+    private void token(String data){
+
+        String URL = "http://dlswns619.dothome.co.kr/api/auth";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.i("VOLLEY", String.valueOf(response));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + data);
+
+                Log.i("VOLLEY", String.valueOf(params));
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        requestQueue.add(stringRequest);
+
+    }
 }

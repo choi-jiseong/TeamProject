@@ -122,7 +122,7 @@ public class StudentActivity extends AppCompatActivity {
         }
     }
     //    //token auth
-    public void token(String data){
+    private void token(String data){
 
         String URL = "http://dlswns619.dothome.co.kr/api/auth";
 

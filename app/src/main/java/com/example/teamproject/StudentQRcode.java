@@ -2,6 +2,7 @@ package com.example.teamproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class StudentQRcode extends Fragment {
 
     private View view;
@@ -21,7 +36,7 @@ public class StudentQRcode extends Fragment {
     private Button qPm;
     private Button qLe;
     private String status, id, name, email, position, class_name, jwt;
-    private StudentActivity studentActivity = new StudentActivity();
+    private StudentHome studentHome = new StudentHome();
 
     @Nullable
     @Override
@@ -43,6 +58,7 @@ public class StudentQRcode extends Fragment {
         position = bundle.getString("position");
         class_name = bundle.getString("class_name");
         jwt = bundle.getString("jwt");
+        token(jwt);
         if(bundle != null){
             tvName.setText(name);
             tvClass_name.setText(bundle.getString("class_name"));
@@ -82,6 +98,44 @@ public class StudentQRcode extends Fragment {
         intent.putExtra("name", name);
         intent.putExtra("jwt", jwt);
         startActivity(intent);
+    }
+    private void token(String data){
+
+        String URL = "http://dlswns619.dothome.co.kr/api/auth";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.i("VOLLEY", String.valueOf(response));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + data);
+
+                Log.i("VOLLEY", String.valueOf(params));
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        requestQueue.add(stringRequest);
+
     }
 
 }

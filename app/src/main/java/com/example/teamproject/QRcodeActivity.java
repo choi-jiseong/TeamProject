@@ -2,11 +2,20 @@ package com.example.teamproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
@@ -23,7 +32,7 @@ import java.util.Map;
 
 public class QRcodeActivity extends AppCompatActivity {
     private ImageView iv;
-    private StudentActivity studentActivity = new StudentActivity();
+    private StudentHome studentHome = new StudentHome();
 //    private long now = System.currentTimeMillis();
 //    private Date date = new Date(now);
     private HashMap<String, Object> map = new HashMap<>();
@@ -43,6 +52,7 @@ public class QRcodeActivity extends AppCompatActivity {
         String name = intent.getExtras().getString("name");
         String id = intent.getExtras().getString("id");
         String jwt = intent.getExtras().getString("jwt");
+        token(jwt);
 
         map.put("attendance", attendance);
         map.put("id", id);
@@ -80,5 +90,43 @@ public class QRcodeActivity extends AppCompatActivity {
             jsonObject.put(key, value);
         }
         return jsonObject;
+    }
+    private void token(String data){
+
+        String URL = "http://dlswns619.dothome.co.kr/api/auth";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.i("VOLLEY", String.valueOf(response));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + data);
+
+                Log.i("VOLLEY", String.valueOf(params));
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        requestQueue.add(stringRequest);
+
     }
 }

@@ -21,7 +21,7 @@ public class TokenRequest extends Application {
 //    public void TokenRequest(String token){
 //
 //
-//        String URL = "";
+//        String URL = "http://dlswns619.dothome.co.kr/api/auth";
 //
 //        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 //        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {

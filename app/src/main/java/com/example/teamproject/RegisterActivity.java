@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
     //가입 POST
     private void registerSubmit(JSONObject data){
 
-        URL = "";
+        URL = "http://dlswns619.dothome.co.kr/api/client/register";
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, data, new Response.Listener<JSONObject>() {
@@ -175,7 +175,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void emailCheck(JSONObject data){
 
 
-        URL = "";
+        URL = "http://dlswns619.dothome.co.kr/api/client/emailduplicatecheck";
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, data, new Response.Listener<JSONObject>() {

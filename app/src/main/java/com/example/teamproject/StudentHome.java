@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class StudentHome extends Fragment {
 
     private View view;
     protected TextView homeName, homeClass;
     private Button logoutBtn;
     protected ImageView homePoto;
-    Context context = getActivity();
     private StudentActivity studentActivity = new StudentActivity();
 
     @Nullable
@@ -45,6 +59,7 @@ public class StudentHome extends Fragment {
         String position = bundle.getString("position");
         String class_name = bundle.getString("class_name");
         String jwt = bundle.getString("jwt");
+        token(jwt);
         if(bundle != null){
             homeName.setText(name);
             homeClass.setText(class_name);
@@ -57,6 +72,7 @@ public class StudentHome extends Fragment {
                 new AlertDialog.Builder(getContext()).setTitle("로그아웃").setMessage("로그아웃 하시겠습니까?").setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        logoutToken(jwt);
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -71,5 +87,82 @@ public class StudentHome extends Fragment {
         });
 
         return view;
+    }
+    private void token(String data){
+
+        String URL = "http://dlswns619.dothome.co.kr/api/auth";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.i("VOLLEY", String.valueOf(response));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + data);
+
+                Log.i("VOLLEY", String.valueOf(params));
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void logoutToken(String data){
+
+        String URL = "http://dlswns619.dothome.co.kr/api/client/logout";
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Log.i("VOLLEY", String.valueOf(response));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("VOLLEY", error.toString());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + data);
+
+                Log.i("VOLLEY", String.valueOf(params));
+                return params;
+            }
+        };
+
+        stringRequest.setShouldCache(false);
+        requestQueue.add(stringRequest);
+
     }
 }
