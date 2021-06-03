@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterRequest extends StringRequest {
-    final static private String URL = "dlswns619.dothome.co.kr/api/client/register";
+    final static private String URL = "";
     private Map<String, String> parameters;
 
     public RegisterRequest (String email, String password, String name, int id, String phone, String position, String class_room, Response.Listener<String> listener){
