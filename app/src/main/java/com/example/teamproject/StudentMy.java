@@ -116,7 +116,7 @@ public class StudentMy extends Fragment {
     //    <----------------------------------사진관련코드------------------------------->
     private void token(String data){
 
-        String URL = "http://dlswns619.dothome.co.kr/api/auth";
+        String URL = "";
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,  new Response.Listener<String>() {
