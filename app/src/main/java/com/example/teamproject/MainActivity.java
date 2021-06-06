@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void loginSubmit(JSONObject data){
 
-        URL = "http://dlswns619.dothome.co.kr/api/client/login";
+        URL = "";
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URL, data, new Response.Listener<JSONObject>() {
