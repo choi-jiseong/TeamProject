@@ -50,6 +50,8 @@ public class StudentActivity extends AppCompatActivity {
         studentMy = new StudentMy();
         studentQRcode = new StudentQRcode();
 
+
+        //데이터 받기
         intent = getIntent();
         String id = intent.getStringExtra("id");
         String name = intent.getStringExtra("name");
@@ -60,6 +62,8 @@ public class StudentActivity extends AppCompatActivity {
 
         token(jwt);
 
+
+        //데이터 보내주기
         bundle = new Bundle();
         bundle.putString("name", name);
         bundle.putString("class_name", class_name);
@@ -121,7 +125,7 @@ public class StudentActivity extends AppCompatActivity {
                 break;
         }
     }
-    //    //token auth
+    //token auth
     private void token(String data){
 
         String URL = "";
